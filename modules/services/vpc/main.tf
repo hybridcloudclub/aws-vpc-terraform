@@ -82,6 +82,9 @@ resource "aws_subnet" "pri_sub_2" {
 ######## Availability Zone 2 #########
 
 
+###### Route Tables and Route Table Associations ########
+
+
 
 ###### Security Group Setup ######
 
@@ -114,4 +117,30 @@ resource "aws_security_group" "allow_ssh_to_bastion" {
 }
 
 
-###### Allow TLS to WWW Server ########
+###### Allow HTTP Connections to WWW Server ########
+
+###### Insecure and needs to be HTTPS ######
+resource "aws_security_group" "allow_http_www" {
+  name        = "allow_http_www"
+  description = "Allow WWW-HTTP inbound traffic"
+  vpc_id      = aws_vpc.standard_vpc.id
+
+  ingress {
+    description = "HTTP from VPC"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = aws_vpc.standard_vpc.cidr_block
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_http_www"
+  }
+}
