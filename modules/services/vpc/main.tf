@@ -79,11 +79,68 @@ resource "aws_subnet" "pri_sub_2" {
   }
 }
 
+######## End of AZ1 #######
+
 ######## Availability Zone 2 #########
 
+###### Public Subnets ######
+
+resource "aws_subnet" "az2_pub_sub" {
+  vpc_id = aws_vpc.standard_vpc.id
+
+  availability_zone = "us-east-1c"
+  cidr_block        = cidrsubnet(aws_vpc.standard_vpc.cidr_block, 4, 5)
+
+  tags = {
+    Name        = "az2_pub-sub-1"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
+resource "aws_subnet" "az2_pub_sub_2" {
+  vpc_id = aws_vpc.standard_vpc.id
+
+  availability_zone = "us-east-1c"
+  cidr_block        = cidrsubnet(aws_vpc.standard_vpc.cidr_block, 4, 7)
+
+  tags = {
+    Name        = "az2-pub-sub-2"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
+
+###### Private Subnets #######
+
+resource "aws_subnet" "az2_pri_sub" {
+  vpc_id = aws_vpc.standard_vpc.id
+
+  availability_zone = "us-east-1c"
+  cidr_block        = cidrsubnet(aws_vpc.standard_vpc.cidr_block, 4, 6)
+
+  tags = {
+    Name        = "az2_pri-sub-1"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
+
+resource "aws_subnet" "az2_pri_sub_2" {
+  vpc_id = aws_vpc.standard_vpc.id
+
+  availability_zone = "us-east-1c"
+  cidr_block        = cidrsubnet(aws_vpc.standard_vpc.cidr_block, 4, 8)
+
+  tags = {
+    Name        = "az2_pri-sub-2"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
+
+###### End of AZ2 #######
 
 ###### Route Tables and Route Table Associations ########
-
 
 
 ###### Security Group Setup ######
@@ -130,7 +187,7 @@ resource "aws_security_group" "allow_http_www" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = aws_vpc.standard_vpc.cidr_block
+    cidr_blocks = [aws_vpc.standard_vpc.cidr_block]
   }
 
   egress {
