@@ -8,8 +8,23 @@ resource "aws_vpc" "standard_vpc" {
   }
 }
 
+###### Internet Gateway ######
+
+resource "aws_internet_gateway" "dev_vpc_igw" {
+  vpc_id = aws_vpc.standard_vpc.id
+
+  tags = {
+    Name        = "Dev-VPC"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
 
 ###### Subnet Setup ######
+
+###### Availability Zone 1 ######
+
+###### Public Subnets ######
 
 resource "aws_subnet" "pub_sub" {
   vpc_id = aws_vpc.standard_vpc.id
@@ -23,6 +38,20 @@ resource "aws_subnet" "pub_sub" {
     Cost-Center = "PackVsPride"
   }
 }
+resource "aws_subnet" "pub_sub_2" {
+  vpc_id = aws_vpc.standard_vpc.id
+
+  availability_zone = "us-east-1b"
+  cidr_block        = cidrsubnet(aws_vpc.standard_vpc.cidr_block, 4, 3)
+
+  tags = {
+    Name        = "pub-sub-2"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
+
+###### Private Subnets #######
 
 resource "aws_subnet" "pri_sub" {
   vpc_id = aws_vpc.standard_vpc.id
@@ -36,6 +65,22 @@ resource "aws_subnet" "pri_sub" {
     Cost-Center = "PackVsPride"
   }
 }
+
+resource "aws_subnet" "pri_sub_2" {
+  vpc_id = aws_vpc.standard_vpc.id
+
+  availability_zone = "us-east-1b"
+  cidr_block        = cidrsubnet(aws_vpc.standard_vpc.cidr_block, 4, 4)
+
+  tags = {
+    Name        = "pri-sub-2"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
+
+######## Availability Zone 2 #########
+
 
 
 ###### Security Group Setup ######
@@ -67,3 +112,6 @@ resource "aws_security_group" "allow_ssh_to_bastion" {
     Cost-Center = "PackVsPride"
   }
 }
+
+
+###### Allow TLS to WWW Server ########
