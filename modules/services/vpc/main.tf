@@ -20,6 +20,24 @@ resource "aws_internet_gateway" "dev_vpc_igw" {
   }
 }
 
+###### Route Tables and Route Table Associations ########
+
+resource "aws_route_table" "internet_route" {
+  vpc_id = aws_vpc.standard_vpc.id
+
+  ##### Route to the internet via the attached gateway ######
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.dev_vpc_igw.id
+  }
+
+  tags = {
+    Name        = "Dev-VPC"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
+
 ###### Subnet Setup ######
 
 ###### Availability Zone 1 ######
@@ -140,7 +158,7 @@ resource "aws_subnet" "az2_pri_sub_2" {
 
 ###### End of AZ2 #######
 
-###### Route Tables and Route Table Associations ########
+
 
 
 ###### Security Group Setup ######
