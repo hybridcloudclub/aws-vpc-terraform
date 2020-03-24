@@ -158,9 +158,6 @@ resource "aws_subnet" "az2_pri_sub_2" {
 
 ###### End of AZ2 #######
 
-
-
-
 ###### Security Group Setup ######
 
 ###### SSH to Bastion Host Specific ######
@@ -216,6 +213,39 @@ resource "aws_security_group" "allow_http_www" {
   }
 
   tags = {
-    Name = "allow_http_www"
+    Name        = "allow_http_www"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
+  }
+}
+
+
+###### Allow Connections from WWW Server to App Server ########
+
+###### Insecure and needs to be HTTPS ######
+resource "aws_security_group" "allow_www_to_app_server" {
+  name        = "allow_www_to_app_server"
+  description = "Allow WWW Server inbound traffic to App Server"
+  vpc_id      = aws_vpc.standard_vpc.id
+
+  ingress {
+    description = "Traffic from WWW Server to App Server"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.standard_vpc.cidr_block]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "allow_www_to_app_server"
+    Environment = "Development"
+    Cost-Center = "PackVsPride"
   }
 }
