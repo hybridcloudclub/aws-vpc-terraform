@@ -4,5 +4,5 @@
 variable "local_ip" {
   type        = string
   description = "Access to Bastion provided from this IP"
-  default     = "96.241.156.116/32"
+  default     = "0.0.0.0/0"
 }
