@@ -14,7 +14,7 @@ resource "aws_internet_gateway" "dev_vpc_igw" {
   vpc_id = aws_vpc.standard_vpc.id
 
   tags = {
-    Name        = "Dev-VPC"
+    Name        = "Dev-VPC-IGW"
     Environment = "Development"
     Cost-Center = "PackVsPride"
   }
@@ -32,7 +32,7 @@ resource "aws_route_table" "internet_route" {
   }
 
   tags = {
-    Name        = "Dev-VPC"
+    Name        = "Dev-VPC-Default-Route"
     Environment = "Development"
     Cost-Center = "PackVsPride"
   }
